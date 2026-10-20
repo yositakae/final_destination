@@ -1,0 +1,2 @@
+const checks=["Missing foreign keys","Duplicate order items","Row counts by table","Negative measures","Fact-to-dimension referential integrity"];
+export default function DataQuality(){return <><h2 className="text-3xl font-black">Data quality</h2><div className="panel mt-6 p-6"><ul className="grid gap-3">{checks.map(x=><li key={x} className="flex gap-3"><span className="text-emerald-400">✓</span>{x}</li>)}</ul><p className="muted mt-5">Run the provider verification command to execute database checks.</p></div></>}

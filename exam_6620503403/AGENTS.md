@@ -1,0 +1,13 @@
+# Agent Instructions
+
+Read the relevant skill before changing the project. Start with `exam-requirements` for a new paper, add `image-requirements-analysis` for an image, then use `exam-adaptation`. Use `requirement-to-schema`, `database-design`, and `dimensional-modeling` before schema changes. Use exactly one provider skill plus `prisma-migrations`. Use `typescript-etl`, `sql-analytics`, and `data-quality` for data work; `recharts-dashboard` and `dashboard-validation` for UI; `database-backup-restore` and `docker-deployment` for transfer/deploy; `debugging` on failures. Never reset or alter an unconfirmed database. Record decisions in the matrix and verified progress in `PLAN.md`.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

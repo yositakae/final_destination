@@ -1,0 +1,9 @@
+CREATE TABLE "dim_date" ("date_key" INTEGER PRIMARY KEY,"full_date" DATE NOT NULL UNIQUE,"day" INTEGER NOT NULL,"month" INTEGER NOT NULL,"quarter" INTEGER NOT NULL,"year" INTEGER NOT NULL);
+CREATE INDEX "dim_date_year_month_idx" ON "dim_date"("year","month");
+CREATE TABLE "dim_product" ("product_key" SERIAL PRIMARY KEY,"product_id" VARCHAR(50) NOT NULL UNIQUE,"product_name" VARCHAR(160) NOT NULL,"category" VARCHAR(80) NOT NULL,"brand" VARCHAR(80));
+CREATE INDEX "dim_product_category_idx" ON "dim_product"("category");
+CREATE TABLE "dim_customer" ("customer_key" SERIAL PRIMARY KEY,"customer_id" VARCHAR(50) NOT NULL UNIQUE,"customer_name" VARCHAR(160) NOT NULL,"province" VARCHAR(100),"region" VARCHAR(80));
+CREATE INDEX "dim_customer_region_idx" ON "dim_customer"("region");
+CREATE TABLE "dim_store" ("store_key" SERIAL PRIMARY KEY,"store_id" VARCHAR(50) NOT NULL UNIQUE,"store_name" VARCHAR(160) NOT NULL,"province" VARCHAR(100));
+CREATE TABLE "fact_sales" ("sales_key" BIGSERIAL PRIMARY KEY,"order_id" VARCHAR(50) NOT NULL,"order_item_id" VARCHAR(50) NOT NULL,"date_key" INTEGER NOT NULL REFERENCES "dim_date"("date_key"),"product_key" INTEGER NOT NULL REFERENCES "dim_product"("product_key"),"customer_key" INTEGER NOT NULL REFERENCES "dim_customer"("customer_key"),"store_key" INTEGER NOT NULL REFERENCES "dim_store"("store_key"),"quantity" INTEGER NOT NULL,"unit_price" DECIMAL(14,2) NOT NULL,"discount_amount" DECIMAL(14,2) NOT NULL DEFAULT 0,"total_amount" DECIMAL(14,2) NOT NULL,UNIQUE("order_id","order_item_id"));
+CREATE INDEX "fact_sales_date_key_idx" ON "fact_sales"("date_key"); CREATE INDEX "fact_sales_product_key_idx" ON "fact_sales"("product_key"); CREATE INDEX "fact_sales_customer_key_idx" ON "fact_sales"("customer_key"); CREATE INDEX "fact_sales_store_key_idx" ON "fact_sales"("store_key");

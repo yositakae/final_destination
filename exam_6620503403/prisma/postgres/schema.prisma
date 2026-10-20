@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../src/generated/postgres"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model DimDate {
+  dateKey Int @id @map("date_key")
+  fullDate DateTime @unique @db.Date @map("full_date")
+  day Int
+  month Int
+  quarter Int
+  year Int
+  sales FactSale[]
+  @@index([year, month])
+  @@map("dim_date")
+}
+model DimProduct {
+  productKey Int @id @default(autoincrement()) @map("product_key")
+  productId String @unique @db.VarChar(50) @map("product_id")
+  productName String @db.VarChar(160) @map("product_name")
+  category String @db.VarChar(80)
+  brand String? @db.VarChar(80)
+  sales FactSale[]
+  @@index([category])
+  @@map("dim_product")
+}
+model DimCustomer {
+  customerKey Int @id @default(autoincrement()) @map("customer_key")
+  customerId String @unique @db.VarChar(50) @map("customer_id")
+  customerName String @db.VarChar(160) @map("customer_name")
+  province String? @db.VarChar(100)
+  region String? @db.VarChar(80)
+  sales FactSale[]
+  @@index([region])
+  @@map("dim_customer")
+}
+model DimStore {
+  storeKey Int @id @default(autoincrement()) @map("store_key")
+  storeId String @unique @db.VarChar(50) @map("store_id")
+  storeName String @db.VarChar(160) @map("store_name")
+  province String? @db.VarChar(100)
+  sales FactSale[]
+  @@map("dim_store")
+}
+model FactSale {
+  salesKey BigInt @id @default(autoincrement()) @map("sales_key")
+  orderId String @db.VarChar(50) @map("order_id")
+  orderItemId String @db.VarChar(50) @map("order_item_id")
+  dateKey Int @map("date_key")
+  productKey Int @map("product_key")
+  customerKey Int @map("customer_key")
+  storeKey Int @map("store_key")
+  quantity Int
+  unitPrice Decimal @db.Decimal(14, 2) @map("unit_price")
+  discountAmount Decimal @default(0) @db.Decimal(14, 2) @map("discount_amount")
+  totalAmount Decimal @db.Decimal(14, 2) @map("total_amount")
+  date DimDate @relation(fields: [dateKey], references: [dateKey])
+  product DimProduct @relation(fields: [productKey], references: [productKey])
+  customer DimCustomer @relation(fields: [customerKey], references: [customerKey])
+  store DimStore @relation(fields: [storeKey], references: [storeKey])
+  @@unique([orderId, orderItemId])
+  @@index([dateKey])
+  @@index([productKey])
+  @@index([customerKey])
+  @@index([storeKey])
+  @@map("fact_sales")
+}
